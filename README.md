@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 Task Tracker App
 
-## Getting Started
+A simple fullstack task management app built with **Next.js 14 (App Router)**, **TypeScript**, **Prisma**, and **Supabase**.  
+Users can create, update, toggle, and delete tasks — built to practice modern fullstack Next.js concepts like **Server Actions**, **API Routes**, and **Data Revalidation**.
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+- **Next.js 14 (App Router)**
+- **TypeScript**
+- **Prisma ORM**
+- **Supabase (PostgreSQL Database)**
+- **Tailwind CSS**
+- **Zod** (schema validation)
+- **Vercel** (deployment target)
+
+---
+
+## ✨ Features
+
+- ✅ Create new tasks
+- ✅ View all tasks (Server Components)
+- ✅ Toggle tasks as done / undone
+- ✅ Delete tasks
+- ✅ Real-time revalidation (via `revalidateTag`)
+- ⚙️ Configurable with Supabase PostgreSQL backend
+
+---
+
+## 🧠 Learning Goals
+
+This project was built as part of my fullstack roadmap to learn:
+
+- Integrating **Next.js App Router** with Prisma & Supabase
+- Understanding **Server Actions** vs **API Routes**
+- Using **revalidateTag / router.refresh()** for fresh data
+- Writing clean TypeScript & modular components
+
+---
+
+## 🛠️ Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/<your-username>/task-tracker-nextjs.git
+cd task-tracker-nextjs
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environtment variabels
+
+create .env
+
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require"
+```
+
+Make sure to replace credentials with your Supabase connection string
+
+### 4. Set up the database
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 5. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+/app
+  /api
+    /tasks/route.ts        # API endpoints
+  /(tasks)
+    actions.ts             # Server Actions
+    page.tsx               # Main page
+    TaskForm.tsx           # Client form component
+    TaskItem.tsx           # Task item UI
+/lib
+  prisma.ts                # Prisma client setup
+  validations.ts           # Zod schemas
+/prisma
+  schema.prisma            # Prisma schema definition
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧩 Future Improvements
 
-## Learn More
+- Add user authentication (NextAuth / Supabase Auth)
+- Deploy to Vercel + Supabase
+- Add pagination or filters
+- Integrate optimistic UI updates
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧑‍💻 Author
+**Octavianus Fian**
+Front-end developer learning fullstack web development
