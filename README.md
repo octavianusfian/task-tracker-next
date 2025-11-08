@@ -77,6 +77,11 @@ npx prisma db push
 npm run dev
 ```
 
+## Seeder Project
+```bash
+npx prisma db seed
+```
+
 ## 📁 Project Structure
 
 ```bash
