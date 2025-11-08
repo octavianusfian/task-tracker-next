@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -7,6 +8,34 @@ export async function PATCH(
 ) {
   const { id } = await ctx.params;
   try {
+    const cookieHeader = request.headers.get("cookie") ?? "";
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            // split "sb-...=..." pairs into array objects
+            return cookieHeader
+              .split(";")
+              .map((c) => c.trim())
+              .filter(Boolean)
+              .map((c) => {
+                const [name, ...rest] = c.split("=");
+                return { name, value: rest.join("=") };
+              });
+          },
+          setAll() {}, // no-op (we only read cookies here)
+        },
+      }
+    );
+
+    // 3️⃣ get user from cookies
+    const { data: userData, error } = await supabase.auth.getUser();
+
+    if (!userData.user) throw new Error("Unauthorized");
+
     const body = await request.json();
 
     // Destructure any fields you expect
@@ -39,9 +68,8 @@ export async function PATCH(
     );
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    const message =
+      error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ message: message }, { status: 500 });
   }
 }

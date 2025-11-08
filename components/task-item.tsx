@@ -2,9 +2,11 @@
 
 import { Task } from "@/lib/types";
 import { useState, useTransition } from "react";
-import { deleteTask, toggleTaskDone } from "../app/(tasks)/actions";
+import { deleteTask, toggleTaskDone } from "../app/(protected)/(tasks)/actions";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 const priorityColors: Record<number, string> = {
   1: "text-gray-500",
@@ -45,7 +47,13 @@ const TaskItem = ({ task }: { task: Task }) => {
         router.refresh();
       });
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unknown error occurred");
+      }
     }
   };
 
@@ -67,48 +75,70 @@ const TaskItem = ({ task }: { task: Task }) => {
         router.refresh();
       });
     } catch (error) {
-      console.error("Error updating task:", error);
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unknown error occurred");
+      }
     }
   };
 
   return (
     <div className="space-y-1 relative">
-      <input
-        type="checkbox"
-        checked={task.done}
-        onChange={(e) => handleToggle(e)}
-      />
-      {editing ? (
-        <div className="inline ms-2 space-x-2">
+      <div className="flex gap-2 items-center">
+        {isPending ? (
+          <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+        ) : (
           <input
-            value={newTitle}
-            className="p-1 border me-2"
-            onChange={(e) => setNewTitle(e.target.value)}
+            type="checkbox"
+            checked={task.done}
+            onChange={(e) => handleToggle(e)}
+            className={`h-5 w-5 accent-blue-600 cursor-pointer disabled:opacity-60`}
           />
-          <button
-            onClick={() => handleSaveNewTitle()}
-            className="bg-blue-500 p-1 rounded text-white cursor-pointer"
-            disabled={isPending}
+        )}
+        {editing ? (
+          <div className="inline ms-2 space-x-2">
+            <input
+              value={newTitle}
+              className="p-1 border me-2"
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+            <button
+              onClick={() => handleSaveNewTitle()}
+              className={` p-1 rounded text-white ${
+                isPending
+                  ? "bg-blue-400 cursor-not-allowed opacity-70"
+                  : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 cursor-pointer"
+              }`}
+              disabled={isPending}
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setEditing(false)}
+              className={` p-1 rounded text-white  ${
+                isPending
+                  ? "bg-red-400 cursor-not-allowed opacity-70"
+                  : "bg-red-600 hover:bg-red-700 active:bg-red-800 cursor-pointer"
+              }`}
+              disabled={isPending}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <span
+            className={`ms-2 text-xl font-medium ${
+              task.done ? "line-through opacity-60" : ""
+            }`}
+            onClick={() => setEditing(true)}
           >
-            Save
-          </button>
-          <button
-            onClick={() => setEditing(false)}
-            className="bg-red-500 p-1 rounded text-white cursor-pointer"
-          >
-            Cancel
-          </button>
-        </div>
-      ) : (
-        <span
-          className={`ms-2 text-xl font-medium ${
-            task.done ? "line-through opacity-60" : ""
-          }`}
-          onClick={() => setEditing(true)}
-        >
-          {task.title}
-        </span>
-      )}
+            {task.title}
+          </span>
+        )}
+      </div>
 
       {task.description && <p className="text-gray-600">{task.description}</p>}
       <p
@@ -130,12 +160,7 @@ const TaskItem = ({ task }: { task: Task }) => {
 
       <button
         className="text-red-600 absolute right-1 top-1 cursor-pointer"
-        onClick={() =>
-          startTransition(async () => {
-            await deleteTask(task.id);
-            router.refresh();
-          })
-        }
+        onClick={() => deleteTask(task.id)}
       >
         Delete
       </button>

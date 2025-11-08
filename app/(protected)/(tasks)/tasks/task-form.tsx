@@ -13,6 +13,7 @@ import {
 import z from "zod";
 import { createTask } from "../actions";
 import { create } from "domain";
+import { createClient } from "@/lib/supabase/client";
 
 const TaskForm = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const TaskForm = () => {
   const [state, formAction] = useActionState(createTask, {
     success: false,
     message: "",
+    version: 0,
   });
 
   const [title, setTitle] = useState("");
@@ -28,18 +30,22 @@ const TaskForm = () => {
   const [priority, setPriority] = useState<string>("3");
 
   useEffect(() => {
+    console.log(state);
+
     if (state.success) {
       // 1) reset the form
       formRef.current?.reset();
 
       // 2) refresh server components so tagged fetch runs again
-      router.refresh();
+      startTransition(() => {
+        router.refresh();
+      });
 
       setTitle("");
       setDescription("");
       setPriority("3");
     }
-  }, [state.success, router]);
+  }, [state.version, router]);
 
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +64,6 @@ const TaskForm = () => {
         },
       });
 
-      
       setTitle("");
       setDescription("");
       setPriority("3");
@@ -131,7 +136,11 @@ const TaskForm = () => {
         </div>
         <button
           type="submit"
-          className="p-2 rounded bg-blue-600 text-white font-medium cursor-pointer"
+          className={`p-2 rounded text-white font-medium  transition-all duration-200  ${
+            isPending
+              ? "bg-blue-400 cursor-not-allowed opacity-70"
+              : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 cursor-pointer"
+          }`}
           disabled={isPending}
         >
           Add Task
