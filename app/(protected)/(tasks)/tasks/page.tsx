@@ -14,6 +14,8 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 
 async function getTasks(filter: string) {
   const baseUrl = getBaseUrl();
+  console.log(baseUrl);
+  
   const res = await fetch(`${baseUrl}/api/tasks?filter=${filter}`, {
     headers: { cookie: (await headers()).get("cookie") ?? "" },
     next: { tags: ["tasks"] },

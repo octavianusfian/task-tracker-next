@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { prisma } from "@/lib/prisma";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";

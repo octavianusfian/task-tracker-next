@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { prisma } from "@/lib/prisma";
 import { createSupabaseForRoute } from "@/lib/supabase/route";
 import { createServerSupabase, getUserFromRoute } from "@/lib/supabase/server";
