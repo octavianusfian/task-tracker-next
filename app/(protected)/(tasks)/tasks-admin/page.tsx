@@ -7,9 +7,12 @@ import UserInfo from "@/components/UserInfo";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 async function getTasks(filter: string) {
-  const res = await fetch(`/api/tasks?filter=${filter}`, {
+  const baseUrl = getBaseUrl();
+
+  const res = await fetch(`${baseUrl}/api/tasks?filter=${filter}`, {
     headers: { cookie: (await headers()).get("cookie") ?? "" },
     next: { tags: ["tasks"] },
   });

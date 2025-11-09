@@ -10,9 +10,11 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import TaskList from "./task-list";
 import TaskClient from "./task-client";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 async function getTasks(filter: string) {
-  const res = await fetch(`/api/tasks?filter=${filter}`, {
+  const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/tasks?filter=${filter}`, {
     headers: { cookie: (await headers()).get("cookie") ?? "" },
     next: { tags: ["tasks"] },
   });
