@@ -12,7 +12,7 @@ import TaskList from "./task-list";
 import TaskClient from "./task-client";
 
 async function getTasks(filter: string) {
-  const res = await fetch(`http://localhost:3000/api/tasks?filter=${filter}`, {
+  const res = await fetch(`/api/tasks?filter=${filter}`, {
     headers: { cookie: (await headers()).get("cookie") ?? "" },
     next: { tags: ["tasks"] },
   });

@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
 async function getTasks(filter: string) {
-  const res = await fetch(`http://localhost:3000/api/tasks?filter=${filter}`, {
+  const res = await fetch(`/api/tasks?filter=${filter}`, {
     headers: { cookie: (await headers()).get("cookie") ?? "" },
     next: { tags: ["tasks"] },
   });
