@@ -1,10 +1,9 @@
-
-// export const runtime = "nodejs";
-
+"use server";
 import { prisma } from "@/lib/prisma";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { TaskCreateSchema } from "@/lib/validations";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 type ReturnState = {
   success: boolean;
