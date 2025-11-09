@@ -1,5 +1,5 @@
 
-export const runtime = "nodejs";
+// export const runtime = "nodejs";
 
 import { prisma } from "@/lib/prisma";
 import { createServerSupabase } from "@/lib/supabase/server";
