@@ -3,6 +3,11 @@
 A simple fullstack task management app built with **Next.js 14 (App Router)**, **TypeScript**, **Prisma**, and **Supabase**.  
 Users can create, update, toggle, and delete tasks — built to practice modern fullstack Next.js concepts like **Server Actions**, **API Routes**, and **Data Revalidation**.
 
+🔗 **Live Demo:** [task-tracker.vercel.app](https://task-tracker-next-chi.vercel.app/)
+
+## 🖼️ Screenshot
+![Task Tracker Screenshot](./public/ss-1.png)
+
 ---
 
 ## 🚀 Tech Stack
@@ -78,6 +83,7 @@ npm run dev
 ```
 
 ## Seeder Project
+
 ```bash
 npx prisma db seed
 ```
@@ -108,5 +114,6 @@ npx prisma db seed
 - Integrate optimistic UI updates
 
 ## 🧑‍💻 Author
+
 **Octavianus Fian**
 Front-end developer learning fullstack web development
