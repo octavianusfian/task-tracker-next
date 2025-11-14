@@ -3,6 +3,7 @@ export const runtime = "nodejs";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseForRoute } from "@/lib/supabase/route";
 import { createServerSupabase, getUserFromRoute } from "@/lib/supabase/server";
+import { Prisma } from "@prisma/client";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -12,6 +13,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const filter = searchParams.get("filter") ?? "all";
+    const searchQuery = searchParams.get("search") ?? "";
+    const sort = searchParams.get("sort") ?? "";
 
     const cookieHeader = request.headers.get("cookie") ?? "";
 
@@ -41,6 +44,9 @@ export async function GET(request: Request) {
 
     const where = {
       userId: data.user?.id,
+      title: searchQuery
+        ? { contains: searchQuery, mode: "insensitive" as const }
+        : undefined,
       ...(filter === "done"
         ? { done: true }
         : filter === "open"
@@ -48,9 +54,16 @@ export async function GET(request: Request) {
         : {}),
     };
 
+    const orderBy: Prisma.TaskOrderByWithRelationInput[] = [
+      { done: Prisma.SortOrder.desc },
+      ...(sort === "title"
+        ? [{ title: Prisma.SortOrder.desc }]
+        : [{ createdAt: Prisma.SortOrder.desc }]),
+    ];
+
     const tasks = await prisma.task.findMany({
       where,
-      orderBy: [{ done: "desc" }, { createdAt: "desc" }],
+      orderBy,
     });
 
     return NextResponse.json(tasks);

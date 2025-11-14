@@ -7,7 +7,7 @@ const Page = async () => {
 
   const { data } = await supabase.auth.getUser();
 
-  if (data.user) redirect("/tasks");
+  if (data.user) redirect("/");
 
   return <LoginForm />;
 };

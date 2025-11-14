@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Button from "./ui/Button";
 
 const UserInfo = ({ name }: { name: string }) => {
   const supabase = createClient();
@@ -24,12 +25,9 @@ const UserInfo = ({ name }: { name: string }) => {
       <p>
         Hello, <span className="font-semibold">{name}</span>
       </p>
-      <button
-        onClick={handleSignOut}
-        className="bg-red-600 p-2 cursor-pointer text-white hover:bg-red-500"
-      >
+      <Button variant="danger" onClick={handleSignOut}>
         Sign Out
-      </button>
+      </Button>
     </div>
   );
 };

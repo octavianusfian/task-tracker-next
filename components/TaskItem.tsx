@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import Button from "./ui/Button";
+import { Input } from "./ui/Input";
 
 const priorityColors: Record<number, string> = {
   1: "text-gray-500",
@@ -25,13 +27,21 @@ const priorityLabels: Record<number, string> = {
   5: "Very High",
 };
 
-const TaskItem = ({ task }: { task: Task }) => {
+const TaskItem = ({
+  task,
+  onOptimisticDelete,
+}: {
+  task: Task;
+  onOptimisticDelete: (id: string) => void;
+}) => {
   const [isPending, startTransition] = useTransition();
   const [editing, setEditing] = useState(false);
+  const [optimisticDone, setOptimisticDone] = useState(task.done);
   const [newTitle, setNewTitle] = useState(task.title);
   const router = useRouter();
 
   const handleSaveNewTitle = async () => {
+    setEditing(false);
     try {
       const res = await axios.patch(
         `/api/tasks/${task.id}`,
@@ -44,6 +54,7 @@ const TaskItem = ({ task }: { task: Task }) => {
       );
 
       setEditing(false);
+      toast.success(res.data.message);
       startTransition(() => {
         router.refresh();
       });
@@ -55,12 +66,26 @@ const TaskItem = ({ task }: { task: Task }) => {
       } else {
         toast.error("Unknown error occurred");
       }
+      setEditing(true);
     }
+  };
+
+  const handleDelete = async () => {
+    onOptimisticDelete(task.id);
+    startTransition(async () => {
+      try {
+        await deleteTask(task.id);
+        toast.success("Delete task succeded");
+      } catch (error) {
+        router.refresh();
+        toast.error("Delete task failed");
+      }
+    });
   };
 
   const handleToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const done = e.target.checked;
-
+    setOptimisticDone(done);
     try {
       const res = await axios.patch(
         `/api/tasks/${task.id}`,
@@ -71,11 +96,13 @@ const TaskItem = ({ task }: { task: Task }) => {
           },
         }
       );
+      toast.success(res.data.message);
 
       startTransition(() => {
         router.refresh();
       });
     } catch (error) {
+      setOptimisticDone(!done);
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } else if (error instanceof Error) {
@@ -92,51 +119,51 @@ const TaskItem = ({ task }: { task: Task }) => {
         {isPending ? (
           <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
         ) : (
-          <input
+          <Input
             type="checkbox"
-            checked={task.done}
+            checked={optimisticDone}
             onChange={(e) => handleToggle(e)}
             className={`h-5 w-5 accent-blue-600 cursor-pointer disabled:opacity-60`}
           />
         )}
         {editing ? (
-          <div className="inline ms-2 space-x-2">
-            <input
+          <div className="flex ms-2 space-x-2">
+            <Input
               value={newTitle}
-              className="p-1 border me-2"
+              className=" me-2"
               onChange={(e) => setNewTitle(e.target.value)}
             />
-            <button
+            <Button
               onClick={() => handleSaveNewTitle()}
-              className={` p-1 rounded text-white ${
-                isPending
-                  ? "bg-blue-400 cursor-not-allowed opacity-70"
-                  : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 cursor-pointer"
-              }`}
               disabled={isPending}
+              size="small"
             >
               Save
-            </button>
-            <button
-              onClick={() => setEditing(false)}
-              className={` p-1 rounded text-white  ${
-                isPending
-                  ? "bg-red-400 cursor-not-allowed opacity-70"
-                  : "bg-red-600 hover:bg-red-700 active:bg-red-800 cursor-pointer"
-              }`}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setEditing(false);
+                setNewTitle(task.title);
+              }}
               disabled={isPending}
+              size="small"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         ) : (
           <span
             className={`ms-2 text-xl font-medium ${
               task.done ? "line-through opacity-60" : ""
             }`}
-            onClick={() => setEditing(true)}
+            onClick={() => {
+              if (!task.done) {
+                setEditing(true);
+              }
+            }}
           >
-            {task.title}
+            {newTitle}
           </span>
         )}
       </div>
@@ -159,12 +186,16 @@ const TaskItem = ({ task }: { task: Task }) => {
       {isPending && <span className="text-xs opacity-60 ms-2">Saving…</span>}
       <p>Last updated: {new Date(task.updatedAt).toLocaleString()}</p>
 
-      <button
-        className="text-red-600 absolute right-1 top-1 cursor-pointer"
-        onClick={() => deleteTask(task.id)}
-      >
-        Delete
-      </button>
+      {!editing && (
+        <Button
+          className="absolute right-1 top-0"
+          variant="danger"
+          size="small"
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      )}
     </div>
   );
 };

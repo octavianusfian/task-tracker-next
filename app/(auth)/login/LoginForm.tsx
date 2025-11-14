@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+import {Input} from "@/components/ui/Input";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +29,7 @@ const LoginForm = () => {
       if (error) return setErr(error.message);
       toast.success("Login successful!");
 
-      router.push("/tasks");
+      router.push("/");
     } catch (error) {
       console.log(error);
     } finally {
@@ -42,12 +44,12 @@ const LoginForm = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${location.origin}/auth/callback?next=/tasks`,
+          redirectTo: `${location.origin}/auth/callback?next=/`,
         },
       });
       if (error) return setErr(error.message);
-      toast.success("Login successful!");
-      router.push("/tasks");
+      // toast.success("Login successful!");
+      // router.push("/");
     } catch (error) {
       console.log(error);
     } finally {
@@ -59,37 +61,33 @@ const LoginForm = () => {
     <div className="min-h-screen flex items-center justify-center">
       <form onSubmit={onSubmit} className="space-y-3 max-w-sm">
         <h1 className="text-3xl text-center mb-5 font-semibold">Login</h1>
-        <input
+        <Input
           type="text"
           placeholder="Masukkan Email"
           value={email}
-          className="border p-2 w-full"
+          className="w-full"
           name="email"
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input
+        <Input
           type="password"
           placeholder="Masukkan Password"
           value={password}
-          className="border p-2 w-full"
+          className="w-full"
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         />
         {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button
-          disabled={loading}
-          type="submit"
-          className="p-2 bg-blue-500 text-white rounded ml-auto w-full cursor-pointer hover:bg-blue-400"
-        >
+        <Button disabled={loading} type="submit" className="ml-auto w-full">
           Login
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={handleLoginWithGoogle}
-          className="p-2 bg-green-700 text-white rounded ml-auto w-full cursor-pointer hover:bg-green-600"
+          className="bg-green-700 ml-auto w-full cursor-pointer hover:bg-green-600"
         >
           Sign with Google
-        </button>
+        </Button>
         <div className="text-center">
           <Link href={"/signup"} className="text-blue-600 ">
             Sign Up

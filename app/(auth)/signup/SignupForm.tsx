@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+import {Input} from "@/components/ui/Input";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -35,29 +37,26 @@ const SignupForm = () => {
     <div className="min-h-screen flex items-center justify-center">
       <form onSubmit={onSubmit} className="space-y-3 max-w-sm">
         <h1 className="text-3xl text-center mb-5 font-semibold">Sign Up</h1>
-        <input
+        <Input
           type="text"
           placeholder="Masukkan Email"
           value={email}
-          className="border p-2 w-full"
+          className="w-full"
           name="email"
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input
+        <Input
           type="password"
           placeholder="Masukkan Password"
           value={password}
-          className="border p-2 w-full"
+          className="w-full"
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         />
         {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button
-          disabled={loading}
-          className="p-2 bg-blue-500 text-white rounded ml-auto w-full cursor-pointer hover:bg-blue-400"
-        >
+        <Button disabled={loading} className="ml-auto w-full">
           Sign Up
-        </button>
+        </Button>
         <div className="text-center">
           <Link href={"/login"} className="text-blue-600 ">
             Login

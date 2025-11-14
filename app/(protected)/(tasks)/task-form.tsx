@@ -11,11 +11,17 @@ import {
   useTransition,
 } from "react";
 import z from "zod";
-import { createTask } from "../actions";
-import { create } from "domain";
-import { createClient } from "@/lib/supabase/client";
+import { createTask } from "./actions";
+import Button from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Task } from "@/lib/types";
+import toast from "react-hot-toast";
 
-const TaskForm = () => {
+const TaskForm = ({
+  addOptimisticTask,
+}: {
+  addOptimisticTask: (task: Task) => void;
+}) => {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
@@ -30,8 +36,6 @@ const TaskForm = () => {
   const [priority, setPriority] = useState<string>("3");
 
   useEffect(() => {
-    console.log(state);
-
     if (state.success) {
       // 1) reset the form
       formRef.current?.reset();
@@ -40,12 +44,34 @@ const TaskForm = () => {
       startTransition(() => {
         router.refresh();
       });
-
+      toast.success(state.message);
       setTitle("");
       setDescription("");
       setPriority("3");
+    } else {
+      if (state.message !== "") {
+        toast.error(state.message);
+        router.refresh();
+      }
     }
   }, [state.version, router]);
+
+  const actionWithOptimistic = async (formData: FormData) => {
+    const title = (formData.get("title") as string).trim() ?? "";
+
+    if (!title) return;
+
+    addOptimisticTask({
+      id: `temp-${Date.now()}`,
+      title,
+      description,
+      priority: +priority,
+      done: false,
+      updatedAt: new Date(),
+    });
+
+    formAction(formData);
+  };
 
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,15 +114,20 @@ const TaskForm = () => {
       {state.success === true && state.message && (
         <p className="mb-4 text-green-600">{state.message}</p>
       )}
-      <form action={formAction} ref={formRef} className="space-y-4 w-1/3">
+      <form
+        action={actionWithOptimistic}
+        ref={formRef}
+        className="space-y-4 w-1/3"
+      >
         <div className="flex gap-4 items-center">
-          <label htmlFor="title" className="w-[100px]">
+          <label htmlFor="title" className="w-[130px]">
             Title:
           </label>
-          <input
+          <Input
             type="text"
             id="title"
-            className="border p-2 rounded grow"
+            // className="grow"
+
             name="title"
             required
             value={title}
@@ -134,17 +165,9 @@ const TaskForm = () => {
             <option value="5">Very High</option>
           </select>
         </div>
-        <button
-          type="submit"
-          className={`p-2 rounded text-white font-medium  transition-all duration-200  ${
-            isPending
-              ? "bg-blue-400 cursor-not-allowed opacity-70"
-              : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 cursor-pointer"
-          }`}
-          disabled={isPending}
-        >
+        <Button type="submit" disabled={isPending}>
           Add Task
-        </button>
+        </Button>
       </form>
     </div>
   );

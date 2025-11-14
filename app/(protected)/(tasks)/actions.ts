@@ -96,5 +96,6 @@ export async function deleteTask(taskId: string) {
     revalidatePath("/tasks");
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }

@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  experimental: {
-    // helps Next's server components tracer include prisma packages
-    serverComponentsExternalPackages: ["@prisma/client", "prisma"],
-  },
+  // experimental: {
+  //   // helps Next's server components tracer include prisma packages
+  //   serverComponentsExternalPackages: ["@prisma/client", "prisma"],
+  // },
   outputFileTracingIncludes: {
     // include engines for route handlers that use Prisma
     "app/api/**/route": [

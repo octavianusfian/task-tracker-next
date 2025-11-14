@@ -19,15 +19,22 @@ const TaskClient = ({ initialTasks }: { initialTasks: Task[] }) => {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
   useEffect(() => {
+    console.log("Triggers", initialTasks);
+
     setTasks(initialTasks);
   }, [initialTasks]);
+
+  const handleAddOptimisticTask = (task: Task) => {
+    setTasks((prevState) => [...prevState, task]);
+  };
+
   return (
     <>
       <ErrorBoundary FallbackComponent={FallbackComponent}>
         <TaskList tasks={tasks} />
       </ErrorBoundary>
 
-      <TaskForm />
+      <TaskForm addOptimisticTask={handleAddOptimisticTask} />
     </>
   );
 };
