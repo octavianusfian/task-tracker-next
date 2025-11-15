@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
@@ -65,6 +66,7 @@ export async function GET(request: Request) {
       where,
       orderBy,
     });
+    revalidateTag("tasks", "max");
 
     return NextResponse.json(tasks);
   } catch (e) {
