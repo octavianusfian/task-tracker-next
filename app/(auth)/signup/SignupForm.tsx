@@ -27,7 +27,7 @@ const SignupForm = () => {
         password,
       });
       if (error) return setErr(error.message);
-      router.push("/tasks");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
