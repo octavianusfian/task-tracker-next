@@ -3,7 +3,7 @@
 import TaskItem from "@/components/TaskItem";
 import TaskListSkeleton from "@/components/TaskSkeleton";
 import { Task } from "@/lib/types";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 const TaskList = ({ tasks }: { tasks: Task[] }) => {
   const [currTasks, setCurrTasks] = useState<Task[]>(tasks);
@@ -12,9 +12,12 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
     setCurrTasks(tasks);
   }, [tasks]);
 
-  const handleDeleteTask = (id: string) => {
-    setCurrTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  };
+  const handleDeleteTask = useCallback(
+    (id: string) => {
+      setCurrTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    },
+    [tasks]
+  );
   // throw new Error("Boom! An error occurred");
   return (
     <>

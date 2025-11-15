@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
 import Link from "next/link";
+import React from "react";
 
 const priorityColors: Record<number, string> = {
   1: "text-gray-500",
@@ -210,4 +211,4 @@ const TaskItem = ({
   );
 };
 
-export default TaskItem;
+export default React.memo(TaskItem);
