@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
+import Link from "next/link";
 
 const priorityColors: Record<number, string> = {
   1: "text-gray-500",
@@ -184,17 +185,26 @@ const TaskItem = ({
         {task.done ? "Done" : "Open"}
       </p>
       {isPending && <span className="text-xs opacity-60 ms-2">Saving…</span>}
-      <p>Last updated: {new Date(task.updatedAt).toLocaleString()}</p>
+      <div className="flex justify-between items-center">
+        <p>Last updated: {new Date(task.updatedAt).toLocaleString()}</p>
+        <Link href={`/${task.id}`}>
+          <Button variant="secondary" size="small">
+            Detail
+          </Button>
+        </Link>
+      </div>
 
       {!editing && (
-        <Button
-          className="absolute right-1 top-0"
-          variant="danger"
-          size="small"
-          onClick={handleDelete}
-        >
-          Delete
-        </Button>
+        <div>
+          <Button
+            className="absolute right-0 top-0"
+            variant="danger"
+            size="small"
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        </div>
       )}
     </div>
   );

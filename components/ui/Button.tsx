@@ -14,7 +14,7 @@ const Button = ({
     variant === "primary"
       ? "bg-blue-600 text-white hover:bg-blue-500"
       : variant === "secondary"
-      ? "bg-white text-black hover:bg-gray-200 hover:text-gray-800"
+      ? "bg-white text-black hover:bg-gray-200 hover:text-gray-800 border border-gray-400"
       : "bg-red-600 hover:bg-red-500 text-white";
 
   const sizeClass =

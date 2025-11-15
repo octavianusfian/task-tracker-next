@@ -55,6 +55,28 @@ export async function createTask(_prevState: ReturnState, formData: FormData) {
   }
 }
 
+export async function getSingleTask(taskId: string) {
+  console.log("Task id", taskId);
+  
+  try {
+    const supabase = await createServerSupabase();
+
+    const { data } = await supabase.auth.getUser();
+
+    if (!data.user) throw new Error("Unauthorized");
+    const task = await prisma.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
+
+    return task;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function toggleTaskDone(taskId: string, done: boolean) {
   try {
     await prisma.task.update({
