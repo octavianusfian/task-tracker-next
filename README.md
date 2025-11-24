@@ -45,6 +45,9 @@ This project was built as part of my fullstack roadmap to learn:
 
 ---
 
+## Testing
+npm test
+
 ## 🛠️ Getting Started
 
 ### 1. Clone the repo
