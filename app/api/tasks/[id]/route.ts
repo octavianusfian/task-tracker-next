@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   request: Request,
-  ctx: { params: Promise<{ id: string }> }
+  ctx: { params: Promise<{ id: string }> },
 ) {
   const { id } = await ctx.params;
   try {
@@ -30,7 +30,7 @@ export async function PATCH(
           },
           setAll() {}, // no-op (we only read cookies here)
         },
-      }
+      },
     );
 
     // 3️⃣ get user from cookies
@@ -55,7 +55,7 @@ export async function PATCH(
     if (Object.keys(data).length === 0) {
       return NextResponse.json(
         { message: "No valid fields provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -66,7 +66,7 @@ export async function PATCH(
 
     return NextResponse.json(
       { data: updatedTask, message: "Task updated successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.log(error);

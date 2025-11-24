@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      #1. Checkout source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      #2. Setup node js
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install --frozen-lockfile
+
+      # 4. Run tests (sesuaikan dengan script di package.json)
+      - name: Run tests
+        run: npm test --watch=false || npm test
+
+      # 5. Build project (Vite / React)
+      - name: Build
+        run: npm run build

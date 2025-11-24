@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const accessToken = req.cookies
     .getAll()
-    .find((c) => c.name.includes("sb-") && c.name.includes("auth-token"));;
+    .find((c) => c.name.includes("sb-") && c.name.includes("auth-token"));
 
   const url = req.nextUrl.clone();
 

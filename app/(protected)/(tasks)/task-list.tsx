@@ -16,7 +16,7 @@ const TaskList = ({ tasks }: { tasks: Task[] }) => {
     (id: string) => {
       setCurrTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     },
-    [tasks]
+    [tasks],
   );
   // throw new Error("Boom! An error occurred");
   return (

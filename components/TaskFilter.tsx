@@ -4,14 +4,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "./ui/Input";
 import { useMemo, useState, useTransition } from "react";
 
-
 const TaskFilter = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter") ?? "all";
   const [isPending, startTransition] = useTransition();
   const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("search") ?? ""
+    searchParams.get("search") ?? "",
   );
   const [sorting, setSorting] = useState(searchParams.get("sorting") ?? "");
 

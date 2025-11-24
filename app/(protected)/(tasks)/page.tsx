@@ -11,18 +11,17 @@ import { cache } from "react";
 const getTasks = cache(
   async (filter: string, searchQuery: string, sorting: string) => {
     const baseUrl = getBaseUrl();
-   
 
     const res = await fetch(
       `${baseUrl}/api/tasks?filter=${filter}&search=${searchQuery}&sort=${sorting}`,
       {
         headers: { cookie: (await headers()).get("cookie") ?? "" },
         next: { tags: ["tasks"] },
-      }
+      },
     );
 
     return res.json();
-  }
+  },
 );
 
 const TaskPage = async ({

@@ -37,7 +37,7 @@ export async function GET(request: Request) {
           },
           setAll() {}, // no-op (we only read cookies here)
         },
-      }
+      },
     );
 
     // 3️⃣ get user from cookies
@@ -51,8 +51,8 @@ export async function GET(request: Request) {
       ...(filter === "done"
         ? { done: true }
         : filter === "open"
-        ? { done: false }
-        : {}),
+          ? { done: false }
+          : {}),
     };
 
     const orderBy: Prisma.TaskOrderByWithRelationInput[] = [
@@ -94,6 +94,6 @@ export async function POST(request: Request) {
 
   return NextResponse.json(
     { data: newTask, message: "Task created successfully" },
-    { status: 201 }
+    { status: 201 },
   );
 }

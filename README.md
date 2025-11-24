@@ -6,6 +6,7 @@ Users can create, update, toggle, and delete tasks — built to practice modern 
 🔗 **Live Demo:** [task-tracker.vercel.app](https://task-tracker-next-chi.vercel.app/)
 
 ## 🖼️ Screenshot
+
 ![Task Tracker Screenshot](./public/ss-1.png)
 
 ---

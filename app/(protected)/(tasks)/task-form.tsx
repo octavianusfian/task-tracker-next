@@ -100,7 +100,7 @@ const TaskForm = ({
       } else if (error instanceof z.ZodError) {
         alert(
           "Validation Error: " +
-            error.issues.map((issue) => issue.message).join(", ")
+            error.issues.map((issue) => issue.message).join(", "),
         );
       }
     }

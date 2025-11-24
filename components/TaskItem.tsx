@@ -52,7 +52,7 @@ const TaskItem = ({
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       setEditing(false);
@@ -96,7 +96,7 @@ const TaskItem = ({
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       toast.success(res.data.message);
 

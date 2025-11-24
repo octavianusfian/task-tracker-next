@@ -9,6 +9,8 @@ export default async function ProtectedLayout({
   const supabase = await createServerSupabase();
 
   const { data } = await supabase.auth.getUser();
+  console.log("tesss");
+  
 
   if (data?.user?.email === "test@test.com") redirect("/dashboard");
   return <div>{children}</div>;

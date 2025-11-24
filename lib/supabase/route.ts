@@ -20,13 +20,13 @@ export async function createSupabaseForRoute() {
             name: string;
             value: string;
             options?: CookieOptions;
-          }[]
+          }[],
         ) {
           cookiesToSet.forEach(({ name, value, options }) => {
             cookieStore.set(name, value, options);
           });
         },
       },
-    }
+    },
   );
 }

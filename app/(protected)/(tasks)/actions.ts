@@ -57,7 +57,7 @@ export async function createTask(_prevState: ReturnState, formData: FormData) {
 
 export async function getSingleTask(taskId: string) {
   console.log("Task id", taskId);
-  
+
   try {
     const supabase = await createServerSupabase();
 
