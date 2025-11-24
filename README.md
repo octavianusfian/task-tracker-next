@@ -8,7 +8,7 @@ Users can create, update, toggle, and delete tasks — built to practice modern 
 ## 🖼️ Screenshot
 
 ![Task Tracker Screenshot](./public/ss-1.png)
-![Demo](./demo.gif)
+![Demo](./public/demo.gif)
 
 
 ---
