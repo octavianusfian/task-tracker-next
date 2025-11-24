@@ -34,8 +34,6 @@ Users can create, update, toggle, and delete tasks — built to practice modern 
 
 ---
 
-![CI](https://github.com/YOUR_NAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg)
-
 
 ## 🧠 Learning Goals
 
